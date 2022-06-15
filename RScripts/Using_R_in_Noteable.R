@@ -7,6 +7,7 @@
 
 #Here is an example of using R as a calculator to perform a numerical operation. 
 
+
 (13 + 7)^2 - 1*10/2
 
 
