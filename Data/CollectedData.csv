@@ -1,0 +1,13 @@
+ID,Organisation,Age,LOS,Death,consent
+4,Trust3,0,0,Alive,True
+9,Trust9,51,7,Died,True
+46,Trust6,49,7,Alive,True
+112,Trust2,19,3,Alive,True
+114,Trust4,23,3,Alive,True
+135,Trust5,93,10,Alive,True
+187,Trust7,33,4,Died,True
+204,Trust4,27,2,Alive,True
+213,Trust3,48,5,Alive,True
+244,Trust4,76,9,Alive,True
+260,Trust10,11,1,Alive,True
+267,Trust7,79,10,Alive,True
