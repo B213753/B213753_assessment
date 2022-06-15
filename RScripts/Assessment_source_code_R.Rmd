@@ -1,0 +1,212 @@
+---
+title: "R source code for loading LOS_model dataset from NHSRdatasets"
+author: "B213753"
+date: "15/06/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Link to github repo
+
+https://github.com/B213753/B213753_assessment.git
+
+# Introduction
+
+The data capture tool will look at the (length of stay) 'LOS_model' dataset and attempt to model hospital length of stay (LOS) in the ten different trusts within the dataset. Being able to analyse the differences, if any, in length of stay in different trusts will allow for better planning and allocation of resources, or perhaps highlight areas for improvement with future more in-depth analyses.
+
+The tool will look to collect the following variables: patient ID, organisation, patient age, length of stay, and death. 
+Please see the data dictionary below for more details on these variables.
+
+# Script function and output
+
+The purpose of this script is to load the LOS_model dataset into R, give a brief overview of the data using summary tables,
+recode the death variable into a factor and finally split the dataset into test and train sets.
+
+The script also uses R to build a data dictionary that will be appended onto the data collected with the data capture tool.
+
+The formal data dictionary is also provided in this document.
+
+### Outputs
+
+The following files will be created/modified on successful conclusion of this script.
+This script assumes the working directory is set as the root project directory.
+
+- */RawData/LOS_raw.csv* - The raw LOS data containing 300 observations.
+- */Data/LOS_train.csv* - The train dataset containing 288 observations.
+- */Data/LOS_test.csv* - The test dataset containing 11 observations.
+- */Data/LOS_test_marker.csv* - The test marker dataset containing 1 observation.
+
+Add the dictionary stuff here 
+!!!!!
+!!!!!
+
+
+# Load packages and data
+
+The following packages are required for this script:
+
+- **NHSRdatasets** - the package containing the dataset selected (LOS_model) for this project.
+
+- **tidyverse** - The tidyverse is a collection of R packages used in this script for most functions
+in this script in the manipulation of data and files.
+
+- **here** - Used for easy file referencing in project-oriented workflows.
+
+- **knitr** - Used in this script to visualize tables using kable().
+
+- **caret** - Used in this script for a function called createDataPartition() which
+helped split the dataset into test and training sets.
+
+Add the dictionary stuff here 
+!!!!!
+!!!!!
+
+
+```{r a,message = FALSE, warning = FALSE}
+library(NHSRdatasets)
+library(tidyverse)
+library(here)
+library(knitr)
+library(caret)
+```
+
+# Data Dictionary
+
+Data dictionary code here
+
+# Loading R dataset
+
+## Loading raw data into R
+
+The following code loads the raw LOS_model data from the NHSRdatasets package into
+the R environment and assigns the data to a variable called LOS.
+
+```{r load_data} 
+data(LOS_model)
+LOS <- LOS_model
+
+```
+
+## Dataset overview
+
+Before getting the data ready for exploratory and statistical analyses, using glimpse()
+and head(), the dataset was briefly explored for data types, and for any obvious anomalies.
+
+### Glimpse
+```{r data_glimpse}
+glimpse(LOS)
+
+```
+Using glimpse(), the dataset can be shown to have 300 rows and 5 columns. 
+The R data classes of the columns can also be seen (see dictionary for more details):
+
+- **ID** - *int* : ID values are of an integer class. This is acceptable as a row identifier and is used later for indexing.
+- **Organisation** - *ord* : Organisation values is of an ordered factor class with 10 levels. This is acceptable for the data type it portrays.
+- **Age** - *int* : Age values is of an integer class. This is acceptable for the data type it portrays.
+- **LOS** - *int* : LOS (length of stay) values is of an integer class. This is acceptable for the data type it portrays.
+- **Death** - *int* : Death values is of an integer class. Although statistical model software can work with binary 0/1 int values instead of factor, this variable is recoded into a factor with two levels for increased transparency and easier visualization (see below).
+
+### Death Recode
+
+```{r death_recode}
+LOS <- LOS %>% 
+  mutate(Death=recode(factor(Death),'1'='Died','0'='Alive'))
+
+```
+
+The code above recodes the integer values of the raw data into a factor with two levels: "Alive" and "Died".
+
+### Check missing values
+
+```{r missing}
+LOS %>% 
+  map(is.na) %>% 
+  map(sum)
+
+```
+
+There are no counts of missing values (NA).
+
+### Check for error values
+
+```{r error}
+summary(LOS)
+
+```
+
+The summary function shows some of the summary statistics of the dataset. Here we can confirm there are no missing values (which would be counted above). In addition, there appears to be no obvious extreme or error values (such as negative values for age or LOS).
+
+## Save raw data 
+
+As seen from the brief exploration of the dataset above, the data is extremely clean. An output of the final raw dataset is shown below of the first 10 rows of the data.
+
+```{r raw_table}
+LOS %>% 
+  head(10) %>% 
+  kable()
+
+```
+
+With no further manipulation or transformation, the data is saved as a csv file as '/RawData/Los_raw.csv'
+```{r save_raw_data}
+write_csv(LOS, here("RawData", "LOS_raw.csv"))
+```
+
+## Splitting data into test and training sets
+
+```{r split_data}
+set.seed(777)
+testIndex <- createDataPartition(LOS$ID, p = 10/nrow(LOS), 
+                                  list = FALSE, 
+                                  times = 1)
+testIndex
+
+```
+
+Using the createDataPartition() function from the caret package, the ID column of the raw dataset is used as the index to split the dataset into test and training sets. The selected ID numbers are shown above to be split into the test dataset.
+
+```{r split_data2}
+LOS_test <- LOS[testIndex,]
+LOS_train <- LOS[-testIndex,]
+
+# Save a row for assessment marking
+LOS_test_marker <- LOS_test[1,]
+LOS_test <- LOS_test[2:nrow(LOS_test),]
+
+```
+
+The LOS dataset is split using the testIndex as shown above. One observation is removed from the test data to be used for assessment marking purposes. 
+
+The final test dataset is shown in the table below.
+
+```{r test_table}
+LOS_test %>% 
+  kable()
+
+```
+
+
+The observation for marking is shown below.
+
+```{r test_marker_table}
+LOS_test_marker %>% 
+  kable()
+
+```
+
+
+The training table is shown below (first 10 rows)
+
+```{r train_table}
+LOS_train %>% 
+  head(10) %>% 
+  kable()
+
+```
+
+# Data capture tool (python)
+
+Just a description here, the main stuff will be jupyter nb / github?
