@@ -7,8 +7,9 @@
 
 #Here is an example of using R as a calculator to perform a numerical operation. 
 
-(13 + 7)^2 - 1*10/2
 
+(13 + 7)^2 - 1*10/2
+#Test
 
 # Using the c() and cbind() base R functions to combine data values and objects respectively. 
 #Here we are going to use the c() function from the *base* R package to collect data entered at the console. 
