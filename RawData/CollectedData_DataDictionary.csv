@@ -1,0 +1,15 @@
+variable name,variable description,variable options,notes
+Age,Integer value representing age of the patient.,0 to 93,
+consent,A boolean value representing the consent from the end-user to process and share the data collected with the data capture tool.,TRUE,
+Death,"A factor consisting of a string that is either ""Alive"" or ""Died"", representing the status of the patient at the end of their hospital stay.",Alive,Alive: The patient survived the hospital admission.
+ , ,Died,Died: The patient died during hospital admission.
+ID,Integer value representing patient number - should be unique and allows referencing rows to the original raw data.,4 to 267,
+LOS,Integer value representing the days a patient was in hospital.,0 to 10,
+Organisation,"A factor consisting of a string that represents a hospital or organisation e.g. ""Trust1""",Trust3,Trust3: Name of hospital/organisation that admitted patient.
+ , ,Trust9,Trust9: Name of hospital/organisation that admitted patient.
+ , ,Trust6,Trust6: Name of hospital/organisation that admitted patient.
+ , ,Trust2,Trust2: Name of hospital/organisation that admitted patient.
+ , ,Trust4,Trust4: Name of hospital/organisation that admitted patient.
+ , ,Trust5,Trust5: Name of hospital/organisation that admitted patient.
+ , ,Trust7,Trust7: Name of hospital/organisation that admitted patient.
+ , ,Trust10,Trust10: Name of hospital/organisation that admitted patient.
