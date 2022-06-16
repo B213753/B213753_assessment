@@ -7,7 +7,7 @@
 # Data consists of numerical data and character data from NHSRdatasets package.
 
 library(dataMeta)
-library (tidyverse)
+library(tidyverse)
 library(here)
 
 # Read collected data

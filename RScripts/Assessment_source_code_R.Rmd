@@ -38,10 +38,8 @@ This script assumes the working directory is set as the root project directory.
 - */Data/LOS_train.csv* - The train dataset containing 288 observations.
 - */Data/LOS_test.csv* - The test dataset containing 11 observations.
 - */Data/LOS_test_marker.csv* - The test marker dataset containing 1 observation.
-
-Add the dictionary stuff here 
-!!!!!
-!!!!!
+- */RawData/CollectedData_DataDictionary.csv* - The data dictionary created in R saved as csv.
+- */RawData/complete_CollectedData.rds* - R dataset file containing the data dictionary and other metadata appended onto the collected dataset.
 
 
 # Load packages and data
@@ -60,9 +58,7 @@ in this script in the manipulation of data and files.
 - **caret** - Used in this script for a function called createDataPartition() which
 helped split the dataset into test and training sets.
 
-Add the dictionary stuff here 
-!!!!!
-!!!!!
+- **dataMeta** - Used to create a data dictionary within R and append to a dataset.
 
 
 ```{r a,message = FALSE, warning = FALSE}
@@ -71,11 +67,94 @@ library(tidyverse)
 library(here)
 library(knitr)
 library(caret)
+library(dataMeta)
 ```
 
 # Data Dictionary
 
-Data dictionary code here
+#### See below for the R source code which builds and appends a dictionary in R to the collected dataset.
+
+## Data use 
+
+The data collection tool will collect the following variables for use in statistical analyses and modelling: patient ID, organisation, patient age, length of stay, and death. 
+
+The LOS_model is a synthetic dataset from the NHSRdatasets package in R. Data collected using the data collection tool is created during manual user inputs using the tool.
+
+The dataset will undergo analysis, exploration and transformation using RStudio within the Author's Noteable enivronment.The dataset and its outputs will be used to analyse and model the length of stay (LOS) data for hospital admissions. The aim is to seek meaning relationships that aims to improve  health and social care resource allocation and delivery.
+
+## Variable description
+
+The collected dataset contains:
+
+- **ID** : an integer value representing patient number - should be unique and allows referencing rows to the original raw data.
+  + Quantitative data type. 
+  + Min value: none
+  + Max value: 99999
+  + Allowed values: only integer values allowed. The tool does not check for unique IDs (allows data entry for duplicate ID). 
+  + Example: 1, 43
+
+- **Organisation** : a factor consisting of a string that represents a hospital or organisation e.g. "Trust1".
+  + Fixed data type.
+  + The LOS_model dataset contains 10 organisations labelled as:
+    + "Trust1"
+    + "Trust2"
+    + "Trust3"
+    + "Trust4"
+    + "Trust5"
+    + "Trust6"
+    + "Trust7"
+    + "Trust8"
+    + "Trust9"
+    + "Trust10"
+  + Allowed values: the data tool only allows selection from the 10 organisations in the LOS_model dataset.
+
+- **Age** : an integer value representing age of the patient.
+  + Quantitative data type.
+  + Min value: 0
+  + Max value: 150
+  + Allowed values: only integer values allowed.
+  + Example: 45
+
+- **LOS** : length of stay, an integer value representing the days a patient was in hospital.
+  + Quantitative data type.
+  + Min value: 0
+  + Max value: None
+  + Allowed values: only integer values allowed.
+  + Example: 3
+
+- **Death** : a factor consisting of a string that is either "Alive" or "Died", representing the status of the patient at the end of their hospital stay.
+  + Fixed data type.
+  + **Alive** : The patient survived the hospital admission.
+  + **Died** : The patient died during hospital admission.
+  + Allowed values: "Alive" or "Died.
+
+- **consent** : a boolean value representing the consent from the end-user to process and share the data collected with the data capture tool.
+  + Fixed data type.
+  + **TRUE** : Consent granted by end-user.
+  + **FALSE** : Consent not granted by end-user.
+  + Allowed values: TRUE or FALSE.
+
+## Dataset attributes
+
+Relevant dataset attributes are below:
+
+- **main** : string containing the main description of the dataset.
+  + Simple attribute type
+
+- **dictionary** : dataframe object containing the data dictionary.
+  + Complex attribute type
+  + **variable name** : string vector containing the name of each variable/column.
+  + **variable description** : string vector containing the description of each variable/column.
+  + **variable options** : string vector containing the data element options for each variable/column.
+  + **notes** : string vector containing descriptions of variables and their options.
+
+- **last_edit_date** : date format "YYYY-MM-DD HH:MM:SS" of the last time of edit of the dataset and attributes.
+  + Simple attribute type
+
+- **author** : string containing the name of the dataset and dictionary author. E.g. "B213753*
+  + Simple attribute type
+
+
 
 # Loading R dataset
 
@@ -209,4 +288,90 @@ LOS_train %>%
 
 # Data capture tool (python)
 
-Just a description here, the main stuff will be jupyter nb / github?
+#### Please see the jupyter notebook to see the Python source code and the functional data capture tool.
+
+The data capture tool was created using Python within a jupyter notebook. The tool shows the source code of data preparation and uses ipython widgets to create interactive widgets for data entry. By using python, each row of data can be added dynamically by using a submit button, and the collected data table is updated automatically. This is a better user experience compared to iterating through cell blocks for each row of data entered. 
+
+# Building Data dictionary in R
+
+```{r dict_setup}
+CollectedData=read_csv(here("RawData", "CollectedDataFinal.csv"))
+glimpse(CollectedData)
+
+```
+
+The Data collected from the collection tool is loaded into R. As shown, there is a consent column which is added during the data collection in the tool.
+
+## Create Linker dataframe
+```{r dict_linker}
+variable_description <- c(
+  'Integer value representing patient number - should be unique and allows referencing rows to the original raw data.',
+  'A factor consisting of a string that represents a hospital or organisation e.g. "Trust1"',
+  'Integer value representing age of the patient.',
+  'Integer value representing the days a patient was in hospital.',
+  'A factor consisting of a string that is either "Alive" or "Died", representing the status of the patient at the end of their hospital stay.',
+  'A boolean value representing the consent from the end-user to process and share the data collected with the data capture tool.'
+)
+
+variable_type <- c(0,1,0,0,1,1)
+
+linker<-build_linker(CollectedData, variable_description, variable_type)
+linker
+
+```
+
+A linker dataframe is created using variable_description (string vector describing each column) and variable_type (integer vector, 0 for quantitative and 1 for fixed values). This dataframe will then be used to create a data dictionary
+
+## Build dictionary
+```{r dict_build}
+# Build dictionary
+dictionary <- build_dict(my.data = CollectedData, linker = linker)
+
+glimpse(dictionary)
+```
+A dictionary is build using build_dict(), using the collected data and the linker dataframe. Notes are currently left empty to be manually filled below.
+
+```{r dict_notes}
+# Add notes
+dictionary[3,4]<-'Alive: The patient survived the hospital admission.'
+dictionary[4,4]<-'Died: The patient died during hospital admission.'
+dictionary[7,4]<-'Trust3: Name of hospital/organisation that admitted patient.'
+dictionary[8,4]<-'Trust9: Name of hospital/organisation that admitted patient.'
+dictionary[9,4]<-'Trust6: Name of hospital/organisation that admitted patient.'
+dictionary[10,4]<-'Trust2: Name of hospital/organisation that admitted patient.'
+dictionary[11,4]<-'Trust4: Name of hospital/organisation that admitted patient.'
+dictionary[12,4]<-'Trust5: Name of hospital/organisation that admitted patient.'
+dictionary[13,4]<-'Trust7: Name of hospital/organisation that admitted patient.'
+dictionary[14,4]<-'Trust10: Name of hospital/organisation that admitted patient.'
+```
+
+## Save dictionary
+```{r dict_save}
+write_csv(dictionary, here("RawData", "CollectedData_DataDictionary.csv"))
+```
+
+The dictionary saved, and can be re-used for future data collection.
+
+## Append dictionary onto dataset
+```{r dict_append}
+# Main string description
+main_string <- "This data describes the hospital length of stay (LOS) and outcome (death/survived) data from the *NHSRdatasets* package collected by the data capture tool."
+
+complete_CollectedData <- incorporate_attr(my.data = CollectedData, 
+                                           data.dictionary = dictionary,
+                                           main_string = main_string)
+
+# Change the author name
+attributes(complete_CollectedData)$author[1]<-"B213753"
+
+attributes(complete_CollectedData)
+```
+
+The data dictionary is now appended onto the attributes of the collected dataset using incorporate_attr(), along with a main description and the author name. The attributes can be seen above.
+
+## Save completed dataset as R dataset file.
+```{r dict_saveRDS}
+save_it(complete_CollectedData, here("RawData", "complete_CollectedData"))
+        
+```
+
