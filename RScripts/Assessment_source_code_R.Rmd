@@ -9,6 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 # Link to github repo
 
 https://github.com/B213753/B213753_assessment.git
@@ -75,6 +76,8 @@ library(dataMeta)
 #### See below for the R source code which builds and appends a dictionary in R to the collected dataset.
 
 ## Data use 
+
+#### The data management plan is found in the Outputs folder of the repository.
 
 The data collection tool will collect the following variables for use in statistical analyses and modelling: patient ID, organisation, patient age, length of stay, and death. 
 
