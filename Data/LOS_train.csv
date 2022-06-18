@@ -1,11 +1,12 @@
 ID,Organisation,Age,LOS,Death
-1,Trust1,55,2,Alive
 2,Trust2,27,1,Alive
 3,Trust3,93,12,Alive
 4,Trust4,45,3,Died
+5,Trust5,70,11,Alive
 6,Trust6,60,7,Alive
 7,Trust7,25,4,Alive
 8,Trust8,48,4,Alive
+9,Trust9,51,7,Died
 10,Trust10,81,1,Alive
 11,Trust1,58,4,Alive
 12,Trust2,16,3,Alive
@@ -20,7 +21,6 @@ ID,Organisation,Age,LOS,Death
 21,Trust1,64,7,Alive
 22,Trust2,53,7,Alive
 23,Trust3,12,5,Alive
-24,Trust4,16,3,Alive
 25,Trust5,83,7,Alive
 26,Trust6,49,10,Alive
 27,Trust7,84,14,Died
@@ -42,6 +42,7 @@ ID,Organisation,Age,LOS,Death
 43,Trust3,24,6,Died
 44,Trust4,67,9,Alive
 45,Trust5,33,3,Alive
+46,Trust6,49,7,Alive
 47,Trust7,94,15,Alive
 48,Trust8,95,1,Alive
 49,Trust9,46,3,Alive
@@ -55,7 +56,6 @@ ID,Organisation,Age,LOS,Death
 57,Trust7,8,2,Died
 58,Trust8,95,14,Alive
 59,Trust9,19,1,Alive
-60,Trust10,12,1,Alive
 61,Trust1,67,8,Alive
 62,Trust2,39,2,Alive
 63,Trust3,78,5,Alive
@@ -80,9 +80,7 @@ ID,Organisation,Age,LOS,Death
 82,Trust2,54,8,Died
 83,Trust3,9,1,Alive
 84,Trust4,19,1,Alive
-85,Trust5,90,12,Alive
 86,Trust6,13,2,Alive
-87,Trust7,26,3,Alive
 88,Trust8,22,2,Alive
 89,Trust9,13,3,Alive
 90,Trust10,6,4,Alive
@@ -107,7 +105,9 @@ ID,Organisation,Age,LOS,Death
 109,Trust9,65,5,Died
 110,Trust10,42,5,Alive
 111,Trust1,41,3,Alive
+112,Trust2,19,3,Alive
 113,Trust3,49,6,Alive
+114,Trust4,23,3,Alive
 115,Trust5,16,2,Alive
 116,Trust6,40,4,Died
 117,Trust7,16,3,Alive
@@ -128,8 +128,8 @@ ID,Organisation,Age,LOS,Death
 132,Trust2,8,5,Alive
 133,Trust3,29,1,Died
 134,Trust4,44,5,Alive
+135,Trust5,93,10,Alive
 136,Trust6,27,4,Alive
-137,Trust7,78,10,Alive
 138,Trust8,62,7,Alive
 139,Trust9,87,11,Alive
 140,Trust10,29,3,Alive
@@ -151,14 +151,12 @@ ID,Organisation,Age,LOS,Death
 156,Trust6,74,11,Alive
 157,Trust7,49,8,Alive
 158,Trust8,50,2,Alive
-159,Trust9,53,6,Alive
 160,Trust10,92,1,Died
 161,Trust1,82,9,Died
 162,Trust2,17,2,Alive
 163,Trust3,5,1,Alive
 164,Trust4,36,2,Alive
 165,Trust5,24,2,Alive
-166,Trust6,18,2,Alive
 167,Trust7,58,4,Died
 168,Trust8,26,4,Alive
 169,Trust9,49,8,Alive
@@ -167,7 +165,6 @@ ID,Organisation,Age,LOS,Death
 172,Trust2,10,18,Died
 173,Trust3,78,1,Alive
 174,Trust4,22,3,Alive
-175,Trust5,77,3,Died
 176,Trust6,42,4,Alive
 177,Trust7,94,7,Died
 178,Trust8,9,2,Alive
@@ -179,6 +176,7 @@ ID,Organisation,Age,LOS,Death
 184,Trust4,63,8,Alive
 185,Trust5,59,2,Alive
 186,Trust6,63,6,Alive
+187,Trust7,33,4,Died
 188,Trust8,83,6,Alive
 189,Trust9,8,1,Alive
 190,Trust10,34,5,Alive
@@ -195,6 +193,7 @@ ID,Organisation,Age,LOS,Death
 201,Trust1,80,5,Alive
 202,Trust2,69,6,Alive
 203,Trust3,65,8,Alive
+204,Trust4,27,2,Alive
 205,Trust5,15,1,Alive
 206,Trust6,10,1,Alive
 207,Trust7,58,1,Alive
@@ -203,6 +202,7 @@ ID,Organisation,Age,LOS,Death
 210,Trust10,56,7,Alive
 211,Trust1,15,1,Alive
 212,Trust2,59,4,Alive
+213,Trust3,48,5,Alive
 214,Trust4,55,2,Alive
 215,Trust5,9,12,Died
 216,Trust6,25,4,Alive
@@ -233,13 +233,13 @@ ID,Organisation,Age,LOS,Death
 241,Trust1,60,5,Alive
 242,Trust2,90,7,Alive
 243,Trust3,58,2,Alive
+244,Trust4,76,9,Alive
 245,Trust5,62,6,Alive
 246,Trust6,87,8,Died
 247,Trust7,70,5,Alive
 248,Trust8,12,2,Alive
 249,Trust9,74,8,Alive
 250,Trust10,60,7,Alive
-251,Trust1,73,1,Died
 252,Trust2,90,4,Died
 253,Trust3,75,7,Died
 254,Trust4,87,13,Alive
@@ -248,12 +248,14 @@ ID,Organisation,Age,LOS,Death
 257,Trust7,91,3,Alive
 258,Trust8,79,9,Died
 259,Trust9,7,2,Alive
+260,Trust10,11,1,Alive
 261,Trust1,17,2,Alive
 262,Trust2,84,4,Alive
 263,Trust3,73,9,Alive
 264,Trust4,79,5,Alive
 265,Trust5,68,11,Died
 266,Trust6,81,10,Alive
+267,Trust7,79,10,Alive
 268,Trust8,45,1,Alive
 269,Trust9,88,10,Alive
 270,Trust10,20,3,Alive
@@ -279,11 +281,9 @@ ID,Organisation,Age,LOS,Death
 290,Trust10,90,3,Died
 291,Trust1,17,3,Alive
 292,Trust2,53,3,Alive
-293,Trust3,81,8,Died
 294,Trust4,75,11,Alive
 295,Trust5,32,4,Alive
 296,Trust6,32,6,Alive
 297,Trust7,55,6,Died
 298,Trust8,21,3,Alive
 299,Trust9,54,1,Alive
-300,Trust10,93,15,Alive

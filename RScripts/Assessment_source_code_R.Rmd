@@ -1,7 +1,7 @@
 ---
-title: "R source code for loading LOS_model dataset from NHSRdatasets"
+title: "R source code for loading LOS_model dataset from NHSRdatasets and its data dictionary"
 author: "B213753"
-date: "15/06/2022"
+date: "18/06/2022"
 output: pdf_document
 ---
 
@@ -289,11 +289,24 @@ LOS_train %>%
 
 ```
 
+The test dataset has one row set aside for marking. The three data sets (test marker, test, training) are then saved in the 'Data' folder.
+
+```{r save_tables}
+# Save a row for assessment marking
+LOS_test_marker <- LOS_test[1,]
+LOS_test <- LOS_test[2:nrow(LOS_test),]
+
+# Save test and train datasets as csv into 'Data' folder.
+write_csv(LOS_train, here("Data", "LOS_train.csv"))
+write_csv(LOS_test, here("Data", "LOS_test.csv"))
+write_csv(LOS_test_marker, here("Data", "LOS_test_marker.csv"))
+```
+
 # Data capture tool (python)
 
 #### Please see the jupyter notebook to see the Python source code and the functional data capture tool.
 
-The data capture tool was created using Python within a jupyter notebook. The tool shows the source code of data preparation and uses ipython widgets to create interactive widgets for data entry. By using python, each row of data can be added dynamically by using a submit button, and the collected data table is updated automatically. This is a better user experience compared to iterating through cell blocks for each row of data entered. 
+The data capture tool was created using Python within a jupyter notebook. The tool shows the source code of data preparation and uses ipython widgets to create interactive widgets for data entry. By using python, each row of data can be added dynamically by using a submit button, and the collected data table is updated automatically. This is a better user experience compared to iterating through cell blocks for each row of data entered. The collected data is saved as a csv file in the 'RawData' folder.
 
 # Building Data dictionary in R
 
@@ -308,29 +321,31 @@ The Data collected from the collection tool is loaded into R. As shown, there is
 ## Create Linker dataframe
 ```{r dict_linker}
 variable_description <- c(
-  'Integer value representing patient number - should be unique and allows referencing rows to the original raw data.',
-  'A factor consisting of a string that represents a hospital or organisation e.g. "Trust1"',
+  'Integer value representing patient number - should be unique and allows refer
+  encing rows to the original raw data.',
+  'A factor consisting of a string that represents a hospital or organisation 
+  e.g. "Trust1"',
   'Integer value representing age of the patient.',
   'Integer value representing the days a patient was in hospital.',
-  'A factor consisting of a string that is either "Alive" or "Died", representing the status of the patient at the end of their hospital stay.',
-  'A boolean value representing the consent from the end-user to process and share the data collected with the data capture tool.'
+  'A factor consisting of a string that is either "Alive" or "Died", 
+  representing the status of the patient at the end of their hospital stay.',
+  'A boolean value representing the consent from the end-user to process and 
+  share the data collected with the data capture tool.'
 )
 
 variable_type <- c(0,1,0,0,1,1)
 
 linker<-build_linker(CollectedData, variable_description, variable_type)
-linker
 
 ```
 
 A linker dataframe is created using variable_description (string vector describing each column) and variable_type (integer vector, 0 for quantitative and 1 for fixed values). This dataframe will then be used to create a data dictionary
 
 ## Build dictionary
-```{r dict_build}
+```{r dict_build, echo=FALSE}
 # Build dictionary
 dictionary <- build_dict(my.data = CollectedData, linker = linker)
 
-glimpse(dictionary)
 ```
 A dictionary is build using build_dict(), using the collected data and the linker dataframe. Notes are currently left empty to be manually filled below.
 
@@ -358,7 +373,9 @@ The dictionary saved, and can be re-used for future data collection.
 ## Append dictionary onto dataset
 ```{r dict_append}
 # Main string description
-main_string <- "This data describes the hospital length of stay (LOS) and outcome (death/survived) data from the *NHSRdatasets* package collected by the data capture tool."
+main_string <- "This data describes the hospital length of stay (LOS) and outcome
+(death/survived) data from the *NHSRdatasets* package collected by the data
+capture tool."
 
 complete_CollectedData <- incorporate_attr(my.data = CollectedData, 
                                            data.dictionary = dictionary,
@@ -367,7 +384,6 @@ complete_CollectedData <- incorporate_attr(my.data = CollectedData,
 # Change the author name
 attributes(complete_CollectedData)$author[1]<-"B213753"
 
-attributes(complete_CollectedData)
 ```
 
 The data dictionary is now appended onto the attributes of the collected dataset using incorporate_attr(), along with a main description and the author name. The attributes can be seen above.
