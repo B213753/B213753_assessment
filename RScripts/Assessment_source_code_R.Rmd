@@ -21,15 +21,6 @@ The data capture tool will look at the (length of stay) 'LOS_model' dataset and 
 The tool will look to collect the following variables: patient ID, organisation, patient age, length of stay, and death. 
 Please see the data dictionary below for more details on these variables.
 
-# Script function and output
-
-The purpose of this script is to load the LOS_model dataset into R, give a brief overview of the data using summary tables,
-recode the death variable into a factor and finally split the dataset into test and train sets.
-
-The script also uses R to build a data dictionary that will be appended onto the data collected with the data capture tool.
-
-The formal data dictionary is also provided in this document.
-
 ### Outputs
 
 The following files will be created/modified on successful conclusion of this script.
@@ -177,14 +168,6 @@ LOS <- LOS_model
 Before getting the data ready for exploratory and statistical analyses, using glimpse()
 and head(), the dataset was briefly explored for data types, and for any obvious anomalies.
 
-### Glimpse
-```{r data_glimpse}
-glimpse(LOS)
-
-```
-Using glimpse(), the dataset can be shown to have 300 rows and 5 columns. 
-The R data classes of the columns can also be seen (see dictionary for more details):
-
 - **ID** - *int* : ID values are of an integer class. This is acceptable as a row identifier and is used later for indexing.
 - **Organisation** - *ord* : Organisation values is of an ordered factor class with 10 levels. This is acceptable for the data type it portrays.
 - **Age** - *int* : Age values is of an integer class. This is acceptable for the data type it portrays.
@@ -203,7 +186,7 @@ The code above recodes the integer values of the raw data into a factor with two
 
 ### Check missing values
 
-```{r missing}
+```{r missing, echo=F}
 LOS %>% 
   map(is.na) %>% 
   map(sum)
@@ -244,7 +227,6 @@ set.seed(777)
 testIndex <- createDataPartition(LOS$ID, p = 10/nrow(LOS), 
                                   list = FALSE, 
                                   times = 1)
-testIndex
 
 ```
 
@@ -261,33 +243,6 @@ LOS_test <- LOS_test[2:nrow(LOS_test),]
 ```
 
 The LOS dataset is split using the testIndex as shown above. One observation is removed from the test data to be used for assessment marking purposes. 
-
-The final test dataset is shown in the table below.
-
-```{r test_table}
-LOS_test %>% 
-  kable()
-
-```
-
-
-The observation for marking is shown below.
-
-```{r test_marker_table}
-LOS_test_marker %>% 
-  kable()
-
-```
-
-
-The training table is shown below (first 10 rows)
-
-```{r train_table}
-LOS_train %>% 
-  head(10) %>% 
-  kable()
-
-```
 
 The test dataset has one row set aside for marking. The three data sets (test marker, test, training) are then saved in the 'Data' folder.
 
@@ -310,10 +265,12 @@ The data capture tool was created using Python within a jupyter notebook. The to
 
 # Building Data dictionary in R
 
-```{r dict_setup}
+```{r dict_setup, message=F, results=F}
 CollectedData=read_csv(here("RawData", "CollectedDataFinal.csv"))
-glimpse(CollectedData)
 
+```
+```{r dict_setup2}
+glimpse(CollectedData)
 ```
 
 The Data collected from the collection tool is loaded into R. As shown, there is a consent column which is added during the data collection in the tool.
@@ -342,7 +299,7 @@ linker<-build_linker(CollectedData, variable_description, variable_type)
 A linker dataframe is created using variable_description (string vector describing each column) and variable_type (integer vector, 0 for quantitative and 1 for fixed values). This dataframe will then be used to create a data dictionary
 
 ## Build dictionary
-```{r dict_build, echo=FALSE}
+```{r dict_build, results=F}
 # Build dictionary
 dictionary <- build_dict(my.data = CollectedData, linker = linker)
 
