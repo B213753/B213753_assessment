@@ -1,3 +1,11 @@
+# Author: B213753
+# This script takes the training data set to build a regression model.
+# Then it takes the collected data set (.rds) file to use as a 
+# test dataset to cross validate the model.
+# Outputs are to the console and the plots panel. No outputs are saved
+# as files. 
+
+
 library(tidyverse)
 library(here)
 
